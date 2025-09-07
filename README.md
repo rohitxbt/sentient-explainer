@@ -1,4 +1,4 @@
-**what the fuck is this?**
+# what the fuck is this ??
 
 sentient explainer is a extension that explain things in simple way, by just shortcut
 
