@@ -17,9 +17,12 @@ when you are scrolling X or discord or **any website ( that exist on internet )*
   <img width="220" height="166" alt="{B72DAE22-7086-4C62-B26A-AE08215BEECF}" src="https://github.com/user-attachments/assets/7690f378-4c6b-4774-a4d9-f643ef3ee27a" />
 
 
-  and here is explanation of that example 😸:-
+  # and here is explanation of that example 😸:-
 
   <img width="268" height="126" alt="{4B163D9E-4CD8-48A0-8A72-6450B23DFED1}" src="https://github.com/user-attachments/assets/eca4a7a3-d463-4b99-b7d2-5dbeeda35a2e" />
+
+
+  # here is how to download and run this:
 
 
   
