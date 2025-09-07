@@ -26,15 +26,27 @@ when you are scrolling X or discord or **any website ( that exist on internet )*
 
 :- 
   
-<img width="160" height="56" alt="Screenshot 2025-09-07 162310" src="https://github.com/user-attachments/assets/4b9e9185-e59b-4d80-89f5-e4ce78512725" />
-<img width="323" height="195" alt="Screenshot 2025-09-07 162103" src="https://github.com/user-attachments/assets/844d1e4c-81f9-45a2-b3c7-1c6966e0487d" />
-<img width="431" height="206" alt="Screenshot 2025-09-07 162020" src="https://github.com/user-attachments/assets/48faa730-8d64-419b-8d52-0b9ef1c9b401" />
-<img width="442" height="414" alt="Screenshot 2025-09-07 161922" src="https://github.com/user-attachments/assets/2566ace7-a0e8-4bf4-b1a0-3beacdd05011" />
-<img width="488" height="207" alt="Screenshot 2025-09-07 161757" src="https://github.com/user-attachments/assets/fd38556e-9738-443a-8371-0cb35dd4e35b" />
-<img width="358" height="143" alt="Screenshot 2025-09-07 161615" src="https://github.com/user-attachments/assets/e5c3675a-c29b-4cc5-9a38-fab40d707c66" />
-<img width="367" height="116" alt="Screenshot 2025-09-07 161530" src="https://github.com/user-attachments/assets/f94095f8-e2db-40d5-a97f-8cb358c39270" />
-<img width="464" height="248" alt="Screenshot 2025-09-07 161222" src="https://github.com/user-attachments/assets/aa32fd39-1a3b-4587-8eee-c8a91d6e94bd" />
+<img width="464" height="248" alt="Screenshot 2025-09-07 161222" src="https://github.com/user-attachments/assets/82508f79-394e-4da1-bc4e-33e2526c68e6" />
 
   
 
-  
+  <img width="367" height="116" alt="Screenshot 2025-09-07 161530" src="https://github.com/user-attachments/assets/2f05569e-ad94-4a58-900d-14e338c4eb66" />
+
+<img width="358" height="143" alt="Screenshot 2025-09-07 161615" src="https://github.com/user-attachments/assets/2f393fdb-ef54-4c42-9e65-eb0f65d95215" />
+
+
+<img width="442" height="414" alt="Screenshot 2025-09-07 161922" src="https://github.com/user-attachments/assets/2fccbfb5-b816-40cd-8a43-cf6a9adf843c" />
+
+<img width="160" height="56" alt="Screenshot 2025-09-07 162310" src="https://github.com/user-attachments/assets/e08132b8-208f-4543-85c9-91bd6837543b" />
+
+<img width="431" height="206" alt="Screenshot 2025-09-07 162020" src="https://github.com/user-attachments/assets/f6053bb8-a6e3-479f-a838-3bd9138e4baf" />
+
+# click double time ( i mean there will be 2 folder so you need to click 1 and then you want to select )
+
+# if you don't do then there will show a manifest missing error
+<img width="323" height="195" alt="Screenshot 2025-09-07 162103" src="https://github.com/user-attachments/assets/7f0d8eaf-8f1e-446b-99fe-f49e27804877" />
+
+<img width="266" height="61" alt="Screenshot 2025-09-07 162216" src="https://github.com/user-attachments/assets/c4fd415b-3be1-477a-a3f6-f7d20a00280e" />
+
+
+
