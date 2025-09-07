@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Sentient AI Explainer",
+  "version": "1.0.0",
+  "description": "Explain selected text using Sentient AI - like you're 5 years old",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.fireworks.ai/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Sentient AI Explainer Settings"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sentient AI Explainer Settings</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  width: 350px;       /* popup उतना ही रहेगा */
+  padding: 20px;
+  margin: 0;
+  color: #111;
+  background: transparent;  /* ✅ Purple हट गया */
+}
+
+
+    .container {
+      /* spacing & card feel */
+      padding: 20px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,0,0,0.1);
+
+      /* 🔲 Uiverse.io by kennyotsu-monochromia background */
+      --color: #E1E1E1;
+      background-color: #F3F3F3;
+      background-image:
+        linear-gradient(0deg,
+          transparent 24%, var(--color) 25%, var(--color) 26%,
+          transparent 27%, transparent 74%, var(--color) 75%,
+          var(--color) 76%, transparent 77%, transparent),
+        linear-gradient(90deg,
+          transparent 24%, var(--color) 25%, var(--color) 26%,
+          transparent 27%, transparent 74%, var(--color) 75%,
+          var(--color) 76%, transparent 77%, transparent);
+      background-size: 55px 55px;
+    }
+
+    h1 {
+      font-size: 20px; margin-bottom: 8px; font-weight: 600;
+      color: #1f2937; /* dark heading */
+    }
+
+    .subtitle {
+      font-size: 14px; margin-bottom: 20px; color: #4b5563;
+    }
+
+    .form-group { margin-bottom: 16px; }
+
+    label {
+      display: block; margin-bottom: 6px; font-size: 14px;
+      font-weight: 600; color: #111;
+    }
+
+    /* 🔍 Stylish Input */
+    .input-container { width: 100%; position: relative; }
+
+    .icon {
+      position: absolute; right: 10px; top: calc(50% + 5px);
+      transform: translateY(calc(-50% - 5px));
+    }
+
+    .input {
+      width: 100%; height: 40px; padding: 10px; transition: .2s linear;
+      border: 2.5px solid black; font-size: 14px; text-transform: uppercase;
+      letter-spacing: 2px; border-radius: 8px; background: white; color: black;
+    }
+
+    .input:focus {
+      outline: none; border: 0.5px solid black; box-shadow: -5px -5px 0px black;
+    }
+
+    .input-container:hover > .icon { animation: anim 1s linear infinite; }
+    @keyframes anim {
+      0%,100% { transform: translateY(calc(-50% - 5px)) scale(1); }
+      50% { transform: translateY(calc(-50% - 5px)) scale(1.1); }
+    }
+
+    /* 🔘 Button Group */
+    .button-group { display: flex; gap: 12px; margin-top: 20px; }
+    .btn-primary, .btn-secondary { flex: 1; text-align: center; }
+
+    /* 💜 Save Button */
+    .btn-primary {
+      --color: #560bad;
+      height: 2.6em; line-height: 2.5em; position: relative; cursor: pointer;
+      overflow: hidden; border: 2px solid var(--color); transition: color .5s;
+      z-index: 1; font-size: 17px; border-radius: 6px; font-weight: 500;
+      color: var(--color); background: transparent;
+    }
+    .btn-primary::before {
+      content: ""; position: absolute; z-index: -1; background: var(--color);
+      height: 150px; width: 200px; border-radius: 50%; top: 100%; left: 100%;
+      transition: all .7s;
+    }
+    .btn-primary:hover { color: #fff; }
+    .btn-primary:hover::before { top: -30px; left: -30px; }
+    .btn-primary:active::before { background: #3a0ca3; transition: background 0s; }
+
+    /* ⚡ Test Button (padding 10px 20px as you set) */
+    .btn-secondary {
+      padding: 10px 20px; border: unset; border-radius: 15px; color: #212121;
+      z-index: 1; background: #e8e8e8; position: relative; font-weight: 1000;
+      font-size: 17px; -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+      box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27); transition: all 250ms;
+      overflow: hidden; cursor: pointer;
+    }
+    .btn-secondary::before {
+      content: ""; position: absolute; top: 0; left: 0; height: 100%; width: 0;
+      border-radius: 15px; background-color: #212121; z-index: -1;
+      -webkit-box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27);
+      box-shadow: 4px 8px 19px -3px rgba(0,0,0,0.27); transition: all 250ms;
+    }
+    .btn-secondary:hover { color: #e8e8e8; }
+    .btn-secondary:hover::before { width: 100%; }
+
+    .status {
+      margin-top: 12px; padding: 8px; border-radius: 4px; font-size: 12px;
+      text-align: center; opacity: 0; transition: opacity .3s ease; color: #111;
+    }
+    .status.show { opacity: 1; }
+    .status.success { background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.3); }
+    .status.error { background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.3); }
+
+    /* 🖥 Retro Instructions Card */
+    .card-container {
+      width: 100%; height: 200px; background: #c0c0c0; border: 2px outset #c0c0c0;
+      padding: 2px; font-family: "MS Sans Serif","Tahoma",sans-serif; font-size: 11px;
+      margin-top: 20px; color: #000;
+    }
+    .card { display: flex; flex-direction: column; width: 100%; height: 100%;
+      background: #c0c0c0; border: 2px inset #c0c0c0; overflow: hidden; color: #000; }
+    .card-header { background: #000080; padding: 0; flex-shrink: 0; border-bottom: 1px solid #000; }
+    .card-tabs { display: flex; background: #c0c0c0; border-bottom: 1px solid #808080; height: 20px; }
+    .card-tab { padding: 2px 8px; font-size: 11px; color: #000; background: #c0c0c0;
+      border: 2px outset #c0c0c0; border-bottom: none; cursor: pointer; height: 18px; margin-top: 1px; }
+    .card-tab.active { border-bottom: 1px solid #c0c0c0; margin-top: 0; height: 19px; position: relative; z-index: 2; }
+    .card-body {
+      display: flex; flex-grow: 1; overflow: auto; padding: 4px 0 4px 2px;
+      font-family: "Courier New", monospace; font-size: 12px; line-height: 1.2;
+      background: #ffffff; border: 1px inset #808080; margin: 2px;
+    }
+    .line-numbers {
+      display: flex; flex-direction: column; padding: 0 6px; text-align: right; color: #808080;
+      user-select: none; font-size: 12px; background: #f0f0f0; border-right: 1px solid #c0c0c0;
+    }
+    .code-content { margin: 0; padding: 0 4px; white-space: pre; overflow-x: auto; color: #000; }
+    .code-comment { color: #008000; }
+    .code-keyword { color: #0000ff; font-weight: bold; }
+    .code-variable { color: #800080; }
+    .code-variable-2 { color: #ff0000; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sentient AI Explainer</h1>
+    <p class="subtitle">Explain anything like you are 5 boy</p>
+
+    <div class="form-group">
+      <label for="apiKey">Fireworks AI API Key:</label>
+      <div class="input-container">
+        <input type="password" id="apiKey" class="input" placeholder="Enter your API key here" />
+        <span class="icon">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 5H20" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 8H17" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21 11.5C21 16.75 16.75 21 11.5 21C6.25 21 2 16.75 2 11.5C2 6.25 6.25 2 11.5 2"
+                  stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 22L20 20" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="saveBtn" class="btn-primary">Save</button>
+      <button id="testBtn" class="btn-secondary">Test</button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <!-- 🖥 Retro Instructions Card -->
+    <div class="card-container">
+      <div class="card">
+        <div class="card-header"></div>
+        <div class="card-tabs"><div class="card-tab active">Instructions</div></div>
+        <div class="card-body">
+          <div class="line-numbers"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          <pre class="code-content">
+<span class="code-comment">📖 How to use:</span>
+<span class="code-keyword">1.</span> Get your free API key from 
+    <a href="https://app.fireworks.ai/" target="_blank">app.fireworks.ai</a>
+<span class="code-keyword">2.</span> Paste it above and click <span class="code-variable">SAVE</span>
+<span class="code-keyword">3.</span> Select any text on any website
+<span class="code-keyword">4.</span> Press <span class="code-variable-2">Ctrl + Ctrl</span> quickly
+<span class="code-keyword">5.</span> Get simple explanations instantly 🙂
+          </pre>
+        </div>
+        <div class="card-footer"><span class="language-name">Guide.txt</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

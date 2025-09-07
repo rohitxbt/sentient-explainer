@@ -1,0 +1,168 @@
+/* Sentient AI Explainer Styles */
+.eli5-popup {
+  position: absolute;
+  max-width: 400px;
+  min-width: 200px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 2147483647; /* Maximum z-index */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  user-select: none; /* Prevent text selection while dragging */
+}
+
+.eli5-popup-show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.eli5-popup-dragging {
+  transition: none !important; /* Disable animations while dragging */
+  cursor: grabbing !important;
+}
+
+.eli5-popup-header {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: grab; /* Show that header is draggable */
+  position: relative;
+}
+
+.eli5-popup-header:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.eli5-popup-header:active {
+  cursor: grabbing;
+}
+
+.eli5-popup-summary .eli5-popup-header {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.eli5-popup-eli5 .eli5-popup-header {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.eli5-popup-error .eli5-popup-header {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.eli5-popup-content {
+  margin: 0;
+  padding: 16px;
+  padding-right: 36px;
+  white-space: pre-wrap;
+  max-height: 300px;
+  overflow-y: auto;
+  user-select: text; /* Allow text selection in content */
+}
+
+.eli5-popup-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.eli5-popup-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.eli5-popup-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+.eli5-popup-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  z-index: 1;
+}
+
+.eli5-popup-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.eli5-popup-close:active {
+  transform: scale(0.95);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .eli5-popup {
+    max-width: 90vw;
+    left: 5vw !important;
+    right: 5vw;
+  }
+}
+
+/* -------------------------------------------------- */
+/* From Uiverse.io by aryamitra06 — Loader Animation  */
+/* -------------------------------------------------- */
+/* From Uiverse.io by aryamitra06 */ 
+.loader {
+  display: flex;
+  align-items: center;
+}
+
+.bar {
+  display: inline-block;
+  width: 2px;
+  height: 5px;
+  background-color: rgba(255, 255, 255, .5);
+  border-radius: 5px;
+  animation: scale-up4 1s linear infinite;
+}
+
+.bar:nth-child(2) {
+  height: 20px;
+  margin: 0 5px;
+  animation-delay: .25s;
+}
+
+.bar:nth-child(3) {
+  animation-delay: .5s;
+}
+
+@keyframes scale-up4 {
+  20% {
+    background-color: #ffff;
+    transform: scaleY(1.5);
+  }
+
+  40% {
+    transform: scaleY(1);
+  }
+}
