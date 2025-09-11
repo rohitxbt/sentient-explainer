@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Sentient AI Explainer",
-  "version": "1.0.0",
-  "description": "Explain selected text using Sentient AI - like you're 5 years old",
+  "version": "2.0.0",
+  "description": "Explain selected text using Sentient AI with interactive chat - like you're 5 years old",
   "permissions": [
     "activeTab",
     "storage"
@@ -14,7 +14,8 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
-      "css": ["styles.css"]
+      "css": ["styles.css"],
+      "run_at": "document_idle"
     }
   ],
   "action": {
@@ -25,5 +26,8 @@
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
   }
 }

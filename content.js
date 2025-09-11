@@ -21,6 +21,13 @@ class SentientExplainer {
     // Mouse events for dragging
     document.addEventListener('mousemove', this.handleMouseMove.bind(this));
     document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.currentPopup) {
+        this.closePopup();
+      }
+    });
   }
 
   handleKeyDown(event) {
@@ -43,6 +50,7 @@ class SentientExplainer {
       
       // Check for double Ctrl press
       if (this.ctrlPressCount === 2) {
+        event.preventDefault(); // Prevent any default behavior
         this.handleDoubleCtrl();
         this.ctrlPressCount = 0;
         return;
@@ -69,7 +77,7 @@ class SentientExplainer {
     const selectedText = window.getSelection().toString().trim();
     
     // Do nothing if no text is selected
-    if (!selectedText || selectedText.length < 3) {
+    if (!selectedText || selectedText.length < 2) {
       return;
     }
     
@@ -79,23 +87,31 @@ class SentientExplainer {
     // Show loading popup
     this.showLoadingPopup();
     
-    // Send to AI with ELI5 by default
-    this.explainText(selectedText, 'eli5');
+    // Send to AI for explanation
+    this.explainText(selectedText);
   }
 
   handleMouseDown(event, popup) {
+    // Don't drag if clicking on interactive elements
     if (event.target.closest('.eli5-popup-close')) {
-      return; // Don't drag if clicking close button
+      return;
+    }
+    
+    // Only allow dragging from header
+    if (!event.target.closest('.eli5-popup-header')) {
+      return;
     }
     
     this.isDragging = true;
     popup.classList.add('eli5-popup-dragging');
+    document.body.style.cursor = 'grabbing';
     
     const rect = popup.getBoundingClientRect();
     this.dragOffset.x = event.clientX - rect.left;
     this.dragOffset.y = event.clientY - rect.top;
     
     event.preventDefault();
+    event.stopPropagation();
   }
 
   handleMouseMove(event) {
@@ -112,8 +128,8 @@ class SentientExplainer {
     const viewportHeight = window.innerHeight;
     const popupRect = this.currentPopup.getBoundingClientRect();
     
-    const clampedX = Math.max(0, Math.min(newX, viewportWidth - popupRect.width + scrollLeft));
-    const clampedY = Math.max(0, Math.min(newY, viewportHeight - popupRect.height + scrollTop));
+    const clampedX = Math.max(10, Math.min(newX, viewportWidth - popupRect.width - 10 + scrollLeft));
+    const clampedY = Math.max(10, Math.min(newY, viewportHeight - popupRect.height - 10 + scrollTop));
     
     this.currentPopup.style.left = `${clampedX}px`;
     this.currentPopup.style.top = `${clampedY}px`;
@@ -123,6 +139,7 @@ class SentientExplainer {
     if (this.isDragging && this.currentPopup) {
       this.isDragging = false;
       this.currentPopup.classList.remove('eli5-popup-dragging');
+      document.body.style.cursor = '';
     }
   }
 
@@ -143,7 +160,7 @@ class SentientExplainer {
         return;
       }
 
-      console.log('Making API request with model: accounts/sentientfoundation/models/dobby-unhinged-llama-3-3-70b-new');
+      console.log('Making API request with model: sentientfoundation/dobby-unhinged-llama-3-3-70b-new');
 
       const response = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
         method: 'POST',
@@ -156,11 +173,19 @@ class SentientExplainer {
           messages: [
             {
               role: 'user',
-              content: `Explain this like I'm 5 years old, with simple words: "${text}"`
+              content: `Please explain this text in very simple, easy-to-understand language. Make it short and clear, like you're explaining to a friend who doesn't know much about this topic.
+
+Text: "${text}"
+
+Keep your explanation:
+- Short and simple (3-4 sentences max)
+- Use everyday words, not technical terms
+- Make it conversational and friendly
+- Focus on the main point only`
             }
           ],
-          max_tokens: 200,
-          temperature: 0.7
+          max_tokens: 150, // Reduced for shorter responses
+          temperature: 0.5 // Reduced for more focused responses
         }),
         signal: AbortSignal.timeout(15000)
       });
@@ -187,67 +212,55 @@ class SentientExplainer {
     } catch (error) {
       console.error('AI Explanation Error:', error);
       
-      // Handle specific extension context errors
+      // Handle different error types
+      let errorMessage = '⚠️ AI is confused, try again.';
+      
       if (error.message && error.message.includes('Extension context invalidated')) {
-        console.log('Extension was reloaded, please refresh the page');
-        return;
+        errorMessage = '⚠️ Extension was reloaded, please refresh the page.';
+      } else if (error.message && error.message.includes('chrome.storage')) {
+        errorMessage = '⚠️ Extension error, please refresh the page.';
+      } else if (error.name === 'AbortError' || error.message.includes('timeout')) {
+        errorMessage = '⚠️ Request timeout, try again.';
+      } else if (error.message.includes('API Error')) {
+        errorMessage = '⚠️ API Error. Check your API key in settings.';
       }
       
-      // Handle chrome.storage errors
-      if (error.message && error.message.includes('chrome.storage')) {
-        this.showErrorPopup('⚠️ Extension error, please refresh the page.');
-        return;
-      }
-      
-      // Handle timeout errors
-      if (error.name === 'AbortError' || error.message.includes('timeout')) {
-        this.showErrorPopup('⚠️ Request timeout, try again.');
-        return;
-      }
-      
-      // Handle API errors with more details
-      if (error.message.includes('API Error')) {
-        this.showErrorPopup('⚠️ API Error. Check console for details.');
-        return;
-      }
-      
-      this.showErrorPopup('⚠️ AI is confused, try again.');
+      this.showErrorPopup(errorMessage);
     }
   }
 
   showLoadingPopup() {
-  const selection = window.getSelection();
-  if (selection.rangeCount === 0) return;
+    const selection = window.getSelection();
+    if (selection.rangeCount === 0) return;
 
-  const range = selection.getRangeAt(0);
-  const rect = range.getBoundingClientRect();
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
 
-  // Loader HTML with text + bars side by side
-  const loaderHTML = `
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div>🤔 Thinking...</div>
-      <div class="loader">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+    // Simple loading HTML that fits the smaller popup
+    const loaderHTML = `
+      <div class="loading-container">
+        <div class="loading-text">🤔 Thinking...</div>
+        <div class="loader">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
       </div>
-    </div>
-  `;
+    `;
 
-  this.currentPopup = this.createPopup(loaderHTML, rect);
-  document.body.appendChild(this.currentPopup);
-}
+    this.currentPopup = this.createPopup(loaderHTML, rect, true);
+    document.body.appendChild(this.currentPopup);
+  }
 
-
-  showExplanationPopup(explanation, type = 'eli5') {
+  showExplanationPopup(explanation) {
     if (this.currentPopup) {
-      this.updatePopupContent(explanation, type);
+      this.updatePopupContent(explanation, 'eli5');
     }
   }
 
   showErrorPopup(message) {
     if (this.currentPopup) {
-      this.updatePopupContent(message, 'error');
+      this.updatePopupContent(`<div class="error-message">${message}</div>`, 'error');
     } else {
       const selection = window.getSelection();
       if (selection.rangeCount === 0) return;
@@ -255,34 +268,50 @@ class SentientExplainer {
       const range = selection.getRangeAt(0);
       const rect = range.getBoundingClientRect();
       
-      this.currentPopup = this.createPopup(message, rect, 'error');
+      this.currentPopup = this.createPopup(`<div class="error-message">${message}</div>`, rect, false, 'error');
       document.body.appendChild(this.currentPopup);
     }
   }
 
-  createPopup(content, rect, type = 'eli5') {
+  createPopup(content, rect, isLoading = false, type = 'eli5') {
     const popup = document.createElement('div');
     popup.className = `eli5-popup eli5-popup-${type}`;
     
-    // Position popup
+    // Better positioning logic
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
     
-    popup.style.left = `${rect.left + scrollLeft}px`;
-    popup.style.top = `${rect.bottom + scrollTop + 10}px`;
+    // Calculate position with viewport bounds checking
+    let left = rect.left + scrollLeft;
+    let top = rect.bottom + scrollTop + 10;
     
-    // Create header with type indicator
+    // Ensure popup fits in viewport
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const popupWidth = 320; // Fixed popup width
+    const popupHeight = 250; // Estimated popup height
+    
+    // Adjust horizontal position
+    if (left + popupWidth > viewportWidth) {
+      left = viewportWidth - popupWidth - 20;
+    }
+    if (left < 10) left = 10;
+    
+    // Adjust vertical position
+    if (top + popupHeight > viewportHeight + scrollTop) {
+      top = rect.top + scrollTop - popupHeight - 10;
+    }
+    if (top < scrollTop + 10) {
+      top = scrollTop + 10;
+    }
+    
+    popup.style.left = `${left}px`;
+    popup.style.top = `${top}px`;
+    
+    // Create header
     const header = document.createElement('div');
     header.className = 'eli5-popup-header';
-    if (type === 'summary') {
-      header.textContent = '📄 Summary';
-    } else if (type === 'eli5') {
-      header.textContent = '🤖 Sentient AI';
-    } else if (type === 'error') {
-      header.textContent = '⚠️ Error';
-    } else {
-      header.textContent = '🤔 Loading...';
-    }
+    header.innerHTML = isLoading ? '🤔 Loading...' : '🤖 Sentient AI';
     
     // Add drag functionality to header
     header.addEventListener('mousedown', (e) => {
@@ -298,23 +327,18 @@ class SentientExplainer {
     const closeButton = document.createElement('button');
     closeButton.className = 'eli5-popup-close';
     closeButton.innerHTML = '×';
-    closeButton.title = 'Close (Click to close)';
+    closeButton.title = 'Close explanation';
     closeButton.addEventListener('click', (e) => {
       e.stopPropagation();
       e.preventDefault();
       this.closePopup();
     });
     
-    // Prevent dragging when clicking close button
-    closeButton.addEventListener('mousedown', (e) => {
-      e.stopPropagation();
-    });
-    
     popup.appendChild(header);
     popup.appendChild(contentDiv);
     popup.appendChild(closeButton);
     
-    // Add animation class after a brief delay
+    // Add show animation after brief delay
     setTimeout(() => {
       popup.classList.add('eli5-popup-show');
     }, 10);
@@ -331,10 +355,11 @@ class SentientExplainer {
         contentDiv.innerHTML = content;
       }
       
-      if (headerDiv && type !== 'error') {
-        if (type === 'summary') {
-          headerDiv.textContent = '📄 Summary';
-        } else if (type === 'eli5') {
+      if (headerDiv) {
+        if (type === 'error') {
+          headerDiv.textContent = '⚠️ Error';
+          this.currentPopup.classList.add('eli5-popup-error');
+        } else {
           headerDiv.textContent = '🤖 Sentient AI';
         }
         
@@ -352,13 +377,14 @@ class SentientExplainer {
           this.currentPopup.parentNode.removeChild(this.currentPopup);
         }
         this.currentPopup = null;
-        this.isDragging = false; // Reset dragging state
+        this.isDragging = false;
+        document.body.style.cursor = '';
       }, 200);
     }
   }
 
   handleDocumentClick(event) {
-    // Don't close popup if we're dragging or if clicking inside popup
+    // Don't close popup if we're dragging or clicking inside popup
     if (this.isDragging) return;
     
     // Close popup if clicking outside of it

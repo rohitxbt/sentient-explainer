@@ -1,26 +1,25 @@
 /* Sentient AI Explainer Styles */
 .eli5-popup {
   position: absolute;
-  max-width: 400px;
-  min-width: 200px;
-  background: rgba(0, 0, 0, 0.9);
+  max-width: 350px;  /* Reduced from 450px to 350px */
+  min-width: 250px;  /* Reduced from 300px to 250px */
+  width: 320px;      /* Fixed width instead of 450px */
+  background: rgba(0, 0, 0, 0.95);
   color: white;
   padding: 0;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  z-index: 2147483647; /* Maximum z-index */
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  z-index: 2147483647;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   opacity: 0;
   transform: translateY(-10px) scale(0.95);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   overflow: hidden;
-  user-select: none; /* Prevent text selection while dragging */
+  user-select: none;
 }
 
 .eli5-popup-show {
@@ -29,126 +28,200 @@
 }
 
 .eli5-popup-dragging {
-  transition: none !important; /* Disable animations while dragging */
+  transition: none !important;
   cursor: grabbing !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
 }
 
 .eli5-popup-header {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 8px 16px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
+  padding: 12px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-weight: 600;
-  font-size: 12px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  cursor: grab; /* Show that header is draggable */
+  gap: 8px;
+  cursor: grab;
   position: relative;
+  border-radius: 16px 16px 0 0;
 }
 
 .eli5-popup-header:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4));
 }
 
 .eli5-popup-header:active {
   cursor: grabbing;
 }
 
-.eli5-popup-summary .eli5-popup-header {
-  background: rgba(59, 130, 246, 0.2);
-}
-
-.eli5-popup-eli5 .eli5-popup-header {
-  background: rgba(34, 197, 94, 0.2);
-}
-
-.eli5-popup-error .eli5-popup-header {
-  background: rgba(239, 68, 68, 0.2);
-}
-
 .eli5-popup-content {
   margin: 0;
   padding: 16px;
-  padding-right: 36px;
-  white-space: pre-wrap;
-  max-height: 300px;
+  max-height: 250px;  /* Reduced from 400px to 250px */
+  display: flex;
+  flex-direction: column;
+  user-select: text;
   overflow-y: auto;
-  user-select: text; /* Allow text selection in content */
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .eli5-popup-content::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 .eli5-popup-content::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
 }
 
 .eli5-popup-content::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
 }
 
+.eli5-popup-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 30px 20px;  /* Reduced from 40px to 30px */
+  flex-direction: row;   /* Changed from column to row */
+}
+
+.loading-text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0;  /* Removed margin since it's now inline */
+}
+
+/* Close Button */
 .eli5-popup-close {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 12px;
+  right: 12px;
   background: rgba(255, 255, 255, 0.1);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 16px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
   line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease;
-  z-index: 1;
+  transition: all 0.2s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
 }
 
 .eli5-popup-close:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
 .eli5-popup-close:active {
   transform: scale(0.95);
 }
 
-/* Responsive adjustments */
+/* Error States */
+.eli5-popup-error .eli5-popup-header {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.3));
+}
+
+.error-message {
+  padding: 20px;
+  text-align: center;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  margin: 0;
+}
+
+/* Responsive Design */
 @media (max-width: 480px) {
   .eli5-popup {
-    max-width: 90vw;
-    left: 5vw !important;
-    right: 5vw;
+    max-width: 95vw;
+    width: 95vw;
+    left: 2.5vw !important;
+    right: 2.5vw;
+  }
+  
+  .eli5-popup-content {
+    max-height: 200px;  /* Further reduced for mobile */
+    padding: 12px;
+  }
+  
+  .loading-container {
+    padding: 20px;
   }
 }
 
-/* -------------------------------------------------- */
-/* From Uiverse.io by aryamitra06 — Loader Animation  */
-/* -------------------------------------------------- */
-/* From Uiverse.io by aryamitra06 */ 
+@media (max-width: 320px) {
+  .eli5-popup {
+    width: 98vw;
+    left: 1vw !important;
+  }
+  
+  .eli5-popup-content {
+    max-height: 180px;
+    padding: 12px;
+  }
+}
+
+/* Animation Improvements */
+.eli5-popup {
+  animation-fill-mode: forwards;
+}
+
+.eli5-popup-show {
+  animation: popupFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popupFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Loader Animation - From Uiverse.io by aryamitra06 */
 .loader {
   display: flex;
   align-items: center;
+  gap: 3px;
 }
 
 .bar {
   display: inline-block;
-  width: 2px;
-  height: 5px;
-  background-color: rgba(255, 255, 255, .5);
-  border-radius: 5px;
+  width: 3px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, .4);
+  border-radius: 4px;
   animation: scale-up4 1s linear infinite;
 }
 
+.bar:nth-child(1) {
+  animation-delay: 0s;
+}
+
 .bar:nth-child(2) {
-  height: 20px;
-  margin: 0 5px;
+  height: 16px;
   animation-delay: .25s;
 }
 
@@ -157,12 +230,98 @@
 }
 
 @keyframes scale-up4 {
-  20% {
-    background-color: #ffff;
-    transform: scaleY(1.5);
-  }
-
-  40% {
+  0%, 100% {
+    background-color: rgba(255, 255, 255, .4);
     transform: scaleY(1);
+  }
+  20% {
+    background-color: rgba(255, 255, 255, .8);
+    transform: scaleY(1.8);
+  }
+  40% {
+    background-color: rgba(255, 255, 255, .6);
+    transform: scaleY(1.2);
+  }
+}
+
+/* Focus States for Accessibility */
+.eli5-popup-close:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+/* Smooth Transitions */
+* {
+  box-sizing: border-box;
+}
+
+.eli5-popup * {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .eli5-popup {
+    border: 2px solid white;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .eli5-popup,
+  .eli5-popup-show,
+  .bar {
+    animation: none;
+    transition: none;
+  }
+  
+  .eli5-popup-show {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .eli5-popup {
+    display: none;
+  }
+}
+
+/* Selection Styles */
+.eli5-popup-content::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: white;
+}
+
+/* Scrollbar Styles for Firefox */
+.eli5-popup-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Scrollbar for Webkit Browsers */
+.eli5-popup-content::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Loading State Improvements */
+.loading-container {
+  text-align: center;
+}
+
+.loading-text {
+  font-weight: 500;
+  animation: loadingPulse 2s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
   }
 }
