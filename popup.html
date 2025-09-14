@@ -55,7 +55,7 @@
       font-weight: 600; color: #111;
     }
 
-    /* 🔍 Stylish Input */
+    /* 🔐 Stylish Input */
     .input-container { width: 100%; position: relative; }
 
     .icon {
@@ -77,6 +77,12 @@
     @keyframes anim {
       0%,100% { transform: translateY(calc(-50% - 5px)) scale(1); }
       50% { transform: translateY(calc(-50% - 5px)) scale(1.1); }
+    }
+
+    /* Language input special styling */
+    .language-input {
+      text-transform: none !important;
+      letter-spacing: normal !important;
     }
 
     /* 🔘 Button Group */
@@ -127,7 +133,7 @@
 
     /* 🖥 Retro Instructions Card */
     .card-container {
-      width: 100%; height: 200px; background: #c0c0c0; border: 2px outset #c0c0c0;
+      width: 100%; height: 220px; background: #c0c0c0; border: 2px outset #c0c0c0;
       padding: 2px; font-family: "MS Sans Serif","Tahoma",sans-serif; font-size: 11px;
       margin-top: 20px; color: #000;
     }
@@ -175,6 +181,23 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label for="preferredLanguage">Preferred Language:</label>
+      <div class="input-container">
+        <input type="text" id="preferredLanguage" class="input language-input" placeholder="e.g., Hindi, Spanish, French" />
+        <span class="icon">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="m5 8 6 6" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="m4 14 6-6 2-3" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 5h12" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 2h1" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="m22 22-5-10-5 10" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="m14 18h6" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+
     <div class="button-group">
       <button id="saveBtn" class="btn-primary">Save</button>
       <button id="testBtn" class="btn-secondary">Test</button>
@@ -188,15 +211,16 @@
         <div class="card-header"></div>
         <div class="card-tabs"><div class="card-tab active">Instructions</div></div>
         <div class="card-body">
-          <div class="line-numbers"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+          <div class="line-numbers"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
           <pre class="code-content">
 <span class="code-comment">📖 How to use:</span>
 <span class="code-keyword">1.</span> Get your free API key from 
     <a href="https://app.fireworks.ai/" target="_blank">app.fireworks.ai</a>
-<span class="code-keyword">2.</span> Paste it above and click <span class="code-variable">SAVE</span>
-<span class="code-keyword">3.</span> Select any text on any website
-<span class="code-keyword">4.</span> Press <span class="code-variable-2">Ctrl + Ctrl</span> quickly
-<span class="code-keyword">5.</span> Get simple explanations instantly 🙂
+<span class="code-keyword">2.</span> Set your language (Hindi/English/etc.)
+<span class="code-keyword">3.</span> Paste API key and click <span class="code-variable">SAVE</span>
+<span class="code-keyword">4.</span> Select any text on any website
+<span class="code-keyword">5.</span> Press <span class="code-variable-2">Ctrl + Ctrl</span> quickly
+<span class="code-keyword">6.</span> Get simple explanations instantly 🙂
           </pre>
         </div>
         <div class="card-footer"><span class="language-name">Guide.txt</span></div>

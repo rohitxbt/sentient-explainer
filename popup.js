@@ -1,6 +1,7 @@
 // Popup Script for Sentient AI Explainer
 document.addEventListener('DOMContentLoaded', function() {
   const apiKeyInput = document.getElementById('apiKey');
+  const languageInput = document.getElementById('preferredLanguage');
   const saveBtn = document.getElementById('saveBtn');
   const testBtn = document.getElementById('testBtn');
   const status = document.getElementById('status');
@@ -11,9 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  // Load existing API key
+  // Load existing API key and language
   try {
-    chrome.storage.sync.get(['fireworksApiKey'], function(result) {
+    chrome.storage.sync.get(['fireworksApiKey', 'preferredLanguage'], function(result) {
       if (chrome.runtime.lastError) {
         console.error('Storage error:', chrome.runtime.lastError);
         return;
@@ -21,14 +22,18 @@ document.addEventListener('DOMContentLoaded', function() {
       if (result.fireworksApiKey) {
         apiKeyInput.value = result.fireworksApiKey;
       }
+      if (result.preferredLanguage) {
+        languageInput.value = result.preferredLanguage;
+      }
     });
   } catch (error) {
-    console.error('Failed to load API key:', error);
+    console.error('Failed to load settings:', error);
   }
 
-  // Save API key
+  // Save API key and language
   saveBtn.addEventListener('click', function() {
     const apiKey = apiKeyInput.value.trim();
+    const language = languageInput.value.trim() || 'English'; // Default to English
     
     if (!apiKey) {
       showStatus('Please enter an API key', 'error');
@@ -36,21 +41,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     try {
-      chrome.storage.sync.set({ fireworksApiKey: apiKey }, function() {
+      chrome.storage.sync.set({ 
+        fireworksApiKey: apiKey,
+        preferredLanguage: language
+      }, function() {
         if (chrome.runtime.lastError) {
-          showStatus('Failed to save API key', 'error');
+          showStatus('Failed to save settings', 'error');
           return;
         }
-        showStatus('✅ API key saved successfully!', 'success');
+        showStatus(`✅ Settings saved! Language: ${language}`, 'success');
       });
     } catch (error) {
       showStatus('Storage error: Please restart extension', 'error');
     }
   });
 
-  // Test API key
+  // Test API key with language
   testBtn.addEventListener('click', async function() {
     const apiKey = apiKeyInput.value.trim();
+    const language = languageInput.value.trim() || 'English';
     
     if (!apiKey) {
       showStatus('Please enter an API key first', 'error');
@@ -71,20 +80,23 @@ document.addEventListener('DOMContentLoaded', function() {
           messages: [
             {
               role: 'user',
-              content: 'Explain what 2+2 equals like I\'m 5 years old, with simple words.'
+              content: `Explain what 2+2 equals like I'm 5 years old, with simple words. Please respond in ${language} language.`
             }
           ],
-          max_tokens: 50,
+          max_tokens: 100,
           temperature: 0.7
         })
       });
 
       if (response.ok) {
         const data = await response.json();
-        showStatus('✅ API key works! You\'re all set!', 'success');
+        showStatus(`✅ API works! Language: ${language}`, 'success');
         
-        // Save the working API key
-        chrome.storage.sync.set({ fireworksApiKey: apiKey });
+        // Save the working settings
+        chrome.storage.sync.set({ 
+          fireworksApiKey: apiKey,
+          preferredLanguage: language
+        });
       } else {
         const errorData = await response.text();
         showStatus('❌ API key invalid. Please check your key.', 'error');

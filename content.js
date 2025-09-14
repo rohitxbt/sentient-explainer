@@ -151,16 +151,17 @@ class SentientExplainer {
         return;
       }
       
-      // Get API key from storage
-      const result = await chrome.storage.sync.get(['fireworksApiKey']);
+      // Get API key and language from storage
+      const result = await chrome.storage.sync.get(['fireworksApiKey', 'preferredLanguage']);
       const apiKey = result.fireworksApiKey;
+      const language = result.preferredLanguage || 'English'; // Default to English
       
       if (!apiKey) {
         this.showErrorPopup('⚠️ Please set your Fireworks AI API key in the extension settings first!');
         return;
       }
 
-      console.log('Making API request with model: sentientfoundation/dobby-unhinged-llama-3-3-70b-new');
+      console.log('Making API request with language:', language);
 
       const response = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
         method: 'POST',
@@ -177,11 +178,14 @@ class SentientExplainer {
 
 Text: "${text}"
 
+IMPORTANT: Please respond in ${language} language.
+
 Keep your explanation:
 - Short and simple (3-4 sentences max)
 - Use everyday words, not technical terms
 - Make it conversational and friendly
-- Focus on the main point only`
+- Focus on the main point only
+- Write in ${language} language`
             }
           ],
           max_tokens: 150, // Reduced for shorter responses
