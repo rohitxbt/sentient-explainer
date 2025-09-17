@@ -1,9 +1,12 @@
 /* Sentient AI Explainer Styles */
+
 .eli5-popup {
+  all: initial;
   position: absolute;
-  max-width: 350px;  /* Reduced from 450px to 350px */
-  min-width: 250px;  /* Reduced from 300px to 250px */
-  width: 320px;      /* Fixed width instead of 450px */
+  max-width: 400px;
+  min-width: 280px;
+  width: auto;
+  max-height: 80vh;
   background: rgba(0, 0, 0, 0.95);
   color: white;
   padding: 0;
@@ -20,20 +23,27 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   overflow: hidden;
   user-select: none;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box; 
+  /* ✅ ADDED: For smoother font rendering during animations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.eli5-popup-show {
+.eli5-popup.eli5-popup-show {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-.eli5-popup-dragging {
+.eli5-popup.eli5-popup-dragging {
   transition: none !important;
   cursor: grabbing !important;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
 }
 
-.eli5-popup-header {
+.eli5-popup .eli5-popup-header {
+  box-sizing: border-box;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
   padding: 12px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -47,64 +57,72 @@
   cursor: grab;
   position: relative;
   border-radius: 16px 16px 0 0;
+  transition: background 0.2s ease-in-out;
 }
 
-.eli5-popup-header:hover {
+.eli5-popup .eli5-popup-header:hover {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4));
 }
 
-.eli5-popup-header:active {
+.eli5-popup .eli5-popup-header:active {
   cursor: grabbing;
 }
 
-.eli5-popup-content {
+.eli5-popup .eli5-popup-content {
+  box-sizing: border-box;
   margin: 0;
   padding: 16px;
-  max-height: 250px;  /* Reduced from 400px to 250px */
+  min-height: auto;
+  max-height: 60vh;
   display: flex;
   flex-direction: column;
   user-select: text;
   overflow-y: auto;
   word-wrap: break-word;
   white-space: pre-wrap;
+  flex: 1;
+  /* ✅ ADDED: For smooth content switching */
+  transition: opacity 0.2s ease-in-out;
 }
 
-.eli5-popup-content::-webkit-scrollbar {
+/* ✅ ADDED: Helper class for smooth transitions */
+.eli5-popup .content-fading {
+  opacity: 0;
+}
+
+.eli5-popup .eli5-popup-content::-webkit-scrollbar {
   width: 6px;
 }
-
-.eli5-popup-content::-webkit-scrollbar-track {
+.eli5-popup .eli5-popup-content::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
 }
-
-.eli5-popup-content::-webkit-scrollbar-thumb {
+.eli5-popup .eli5-popup-content::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
-
-.eli5-popup-content::-webkit-scrollbar-thumb:hover {
+.eli5-popup .eli5-popup-content::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Loading State */
-.loading-container {
+.eli5-popup .loading-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 30px 20px;  /* Reduced from 40px to 30px */
-  flex-direction: row;   /* Changed from column to row */
+  padding: 30px 20px;
+  flex-direction: row;
 }
 
-.loading-text {
+.eli5-popup .loading-text {
   font-size: 16px;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 0;  /* Removed margin since it's now inline */
+  margin-bottom: 0;
 }
 
-/* Close Button */
-.eli5-popup-close {
+.eli5-popup .eli5-popup-close {
+  all: initial;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   position: absolute;
   top: 12px;
   right: 12px;
@@ -124,22 +142,18 @@
   z-index: 10;
   backdrop-filter: blur(10px);
 }
-
-.eli5-popup-close:hover {
+.eli5-popup .eli5-popup-close:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
 }
-
-.eli5-popup-close:active {
+.eli5-popup .eli5-popup-close:active {
   transform: scale(0.95);
 }
 
-/* Error States */
-.eli5-popup-error .eli5-popup-header {
+.eli5-popup.eli5-popup-error .eli5-popup-header {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.3));
 }
-
-.error-message {
+.eli5-popup .error-message {
   padding: 20px;
   text-align: center;
   color: #fca5a5;
@@ -149,47 +163,246 @@
   margin: 0;
 }
 
-/* Responsive Design */
+.eli5-popup .explanation-content {
+  margin-bottom: 16px;
+  user-select: text;
+  flex-shrink: 0;
+}
+
+.eli5-popup .chat-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+  user-select: none;
+  flex-shrink: 0;
+  min-height: auto;
+}
+
+.eli5-popup .chat-messages {
+  /* ✅ CHANGED: Removed max-height and overflow-y to prevent nested scrollbar */
+  min-height: auto;
+  margin-bottom: 12px;
+  padding-right: 4px;
+  flex: 1; 
+}
+
+/* ✅ REMOVED: Unnecessary scrollbar styling for the now-gone inner scrollbar */
+/* .eli5-popup .chat-messages::-webkit-scrollbar ... */
+
+.eli5-popup .chat-message {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  user-select: text;
+}
+
+/* ✅ ADDED: Animation for new chat messages */
+.eli5-popup .chat-message:last-child {
+    animation: newMessageFadeIn 0.4s ease-out forwards;
+}
+
+@keyframes newMessageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.eli5-popup .user-message {
+  background: rgba(99, 102, 241, 0.3);
+  margin-left: 20px;
+  text-align: right;
+}
+.eli5-popup .ai-message {
+  background: rgba(255, 255, 255, 0.1);
+  margin-right: 20px;
+}
+
+.eli5-popup .chat-input-container {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  height: 40px;
+  width: 100%;
+}
+.eli5-popup .chat-input {
+  all: initial;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s ease;
+  height: 100%;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+.eli5-popup .chat-input:focus {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+.eli5-popup .chat-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.eli5-popup .chat-send-btn {
+  all: initial;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-width: 70px;
+  height: 100%;
+  font-weight: 500;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+.eli5-popup .chat-send-btn:hover {
+  background: linear-gradient(135deg, #4338ca, #6d28d9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+.eli5-popup .chat-send-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+.eli5-popup .chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+.eli5-popup .chat-send-btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+.eli5-popup .chat-send-btn:hover svg {
+  transform: translateX(2px);
+}
+.eli5-popup .chat-send-btn span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.eli5-popup .chat-loading {
+  display: flex;
+  align-items: center;
+}
+.eli5-popup .typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.eli5-popup .typing-indicator span {
+  height: 6px;
+  width: 6px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  display: inline-block;
+  animation: eli5-typing-animation 1.5s infinite ease-in-out;
+}
+.eli5-popup .typing-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+.eli5-popup .typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.eli5-popup .typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes eli5-typing-animation {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 480px) {
   .eli5-popup {
     max-width: 95vw;
-    width: 95vw;
+    width: auto;
+    min-width: 280px;
     left: 2.5vw !important;
-    right: 2.5vw;
+    right: 2.5vw !important;
+    top: 10px !important;
+    max-height: 85vh;
   }
-  
-  .eli5-popup-content {
-    max-height: 200px;  /* Further reduced for mobile */
+  .eli5-popup .eli5-popup-content {
+    max-height: 70vh;
     padding: 12px;
   }
-  
-  .loading-container {
+  .eli5-popup .chat-messages {
+    /* No max height needed here anymore */
+  }
+  .eli5-popup .loading-container {
     padding: 20px;
   }
+  .eli5-popup .chat-input-container {
+    height: 36px;
+  }
+  .eli5-popup .chat-input {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .eli5-popup .chat-send-btn {
+    min-width: 60px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
 }
-
 @media (max-width: 320px) {
   .eli5-popup {
     width: 98vw;
+    min-width: 260px;
     left: 1vw !important;
+    max-height: 90vh;
   }
-  
-  .eli5-popup-content {
-    max-height: 180px;
+  .eli5-popup .eli5-popup-content {
+    max-height: 75vh;
     padding: 12px;
   }
+  .eli5-popup .chat-messages {
+     /* No max height needed here anymore */
+  }
+  .eli5-popup .chat-input-container {
+    gap: 6px;
+    height: 34px;
+  }
+  .eli5-popup .chat-send-btn {
+    min-width: 50px;
+    font-size: 10px;
+  }
 }
-
-/* Animation Improvements */
 .eli5-popup {
   animation-fill-mode: forwards;
 }
-
-.eli5-popup-show {
-  animation: popupFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+.eli5-popup.eli5-popup-show {
+  animation: eli5-popupFadeIn-animation 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
-@keyframes popupFadeIn {
+@keyframes eli5-popupFadeIn-animation {
   0% {
     opacity: 0;
     transform: translateY(-15px) scale(0.9);
@@ -200,36 +413,31 @@
   }
 }
 
-/* Loader Animation - From Uiverse.io by aryamitra06 */
-.loader {
+.eli5-popup .loader {
   display: flex;
   align-items: center;
   gap: 3px;
 }
-
-.bar {
+.eli5-popup .bar {
   display: inline-block;
   width: 3px;
   height: 8px;
   background-color: rgba(255, 255, 255, .4);
   border-radius: 4px;
-  animation: scale-up4 1s linear infinite;
+  animation: eli5-scale-up4-animation 1s linear infinite;
 }
-
-.bar:nth-child(1) {
+.eli5-popup .bar:nth-child(1) {
   animation-delay: 0s;
 }
-
-.bar:nth-child(2) {
+.eli5-popup .bar:nth-child(2) {
   height: 16px;
   animation-delay: .25s;
 }
-
-.bar:nth-child(3) {
+.eli5-popup .bar:nth-child(3) {
   animation-delay: .5s;
 }
 
-@keyframes scale-up4 {
+@keyframes eli5-scale-up4-animation {
   0%, 100% {
     background-color: rgba(255, 255, 255, .4);
     transform: scaleY(1);
@@ -243,81 +451,62 @@
     transform: scaleY(1.2);
   }
 }
-
-/* Focus States for Accessibility */
-.eli5-popup-close:focus {
+.eli5-popup .eli5-popup-close:focus,
+.eli5-popup .chat-input:focus,
+.eli5-popup .chat-send-btn:focus {
   outline: 2px solid rgba(255, 255, 255, 0.6);
   outline-offset: 2px;
 }
 
-/* Smooth Transitions */
-* {
-  box-sizing: border-box;
-}
-
-.eli5-popup * {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-  transition-duration: 0.2s;
-  transition-timing-function: ease-in-out;
-}
-
-/* High Contrast Mode Support */
 @media (prefers-contrast: high) {
   .eli5-popup {
     border: 2px solid white;
   }
 }
-
-/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   .eli5-popup,
-  .eli5-popup-show,
-  .bar {
+  .eli5-popup.eli5-popup-show,
+  .eli5-popup .bar,
+  .eli5-popup .typing-indicator span {
     animation: none;
     transition: none;
   }
-  
-  .eli5-popup-show {
+  .eli5-popup.eli5-popup-show {
     opacity: 1;
     transform: none;
   }
 }
-
-/* Print Styles */
 @media print {
   .eli5-popup {
     display: none;
   }
 }
-
-/* Selection Styles */
-.eli5-popup-content::selection {
+.eli5-popup .eli5-popup-content::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: white;
+}
+.eli5-popup .chat-message::selection {
   background: rgba(99, 102, 241, 0.3);
   color: white;
 }
 
-/* Scrollbar Styles for Firefox */
-.eli5-popup-content {
+.eli5-popup .eli5-popup-content,
+.eli5-popup .chat-messages {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
 }
-
-/* Custom Scrollbar for Webkit Browsers */
-.eli5-popup-content::-webkit-scrollbar-corner {
+.eli5-popup .eli5-popup-content::-webkit-scrollbar-corner,
+.eli5-popup .chat-messages::-webkit-scrollbar-corner {
   background: transparent;
 }
-
-/* Loading State Improvements */
-.loading-container {
+.eli5-popup .loading-container {
   text-align: center;
 }
-
-.loading-text {
+.eli5-popup .loading-text {
   font-weight: 500;
-  animation: loadingPulse 2s ease-in-out infinite;
+  animation: eli5-loadingPulse-animation 2s ease-in-out infinite;
 }
-
-@keyframes loadingPulse {
+@keyframes eli5-loadingPulse-animation {
   0%, 100% {
     opacity: 0.7;
   }
@@ -325,3 +514,4 @@
     opacity: 1;
   }
 }
+
